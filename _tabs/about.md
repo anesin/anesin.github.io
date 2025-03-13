@@ -4,5 +4,11 @@ icon: fas fa-info-circle
 order: 4
 ---
 
-> Add Markdown syntax content to file `_tabs/about.md`{: .filepath } and it will show up on this page.
-{: .prompt-tip }
+책 읽기를 좋아하는 아저씨입니다.   
+양질의 책이 아닐지라도 읽고 느낀 것들을 끄적여 봅니다.   
+많은 책을 읽고 싶지만 그럴수도 없을테니   
+지금까지 읽어온 책들과 앞으로 읽을 책들을 소소하게 써봅니다.
+
+지나가던 판교 어느 구석에 앉아서   
+
+_아네신_
