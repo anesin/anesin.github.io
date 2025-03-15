@@ -8,3 +8,53 @@
 ';
 
 /* append your custom style below */
+
+.content {
+  font-size: 1.2rem; // 기본 폰트 크기 (기본값: 1.08rem)
+  line-height: 1.8;   // 행간 조정 (가독성 증가)
+  font-family: 'Nanum Myeongjo', serif !important;
+}
+
+h1 {
+  font-size: 2.2rem; // 기본 제목 크기 (기본값: 1.75rem)
+  font-style: bold;
+  font-family: 'Nanum Myeongjo', serif !important;
+  margin-top: 3rem;
+  margin-bottom: 1.5rem;
+}
+
+h2 {
+  font-size: 2rem;
+  font-style: bold;
+  font-family: 'Nanum Myeongjo', serif !important;
+  margin-top: 3rem;
+  margin-bottom: 1.5rem;
+}
+
+h3 {
+  font-size: 1.75rem;
+  font-style: bold;
+  font-family: 'Nanum Myeongjo', serif !important;
+  margin-top: 3rem;
+  margin-bottom: 1.5rem;
+}
+
+h4 {
+  font-size: 1.5rem;
+  font-style: bold;
+  font-family: 'Nanum Myeongjo', serif !important;
+  margin-top: 3rem;
+  margin-bottom: 1.5rem;
+}
+
+p {
+  text-align: justify;
+  font-size: 1.2rem; // 본문 크기
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+blockquote {
+  font-style: italic;
+  line-height: 1.5;
+}
