@@ -1,6 +1,6 @@
 ---
 title: 원칙 Principles
-description: 수학적 사고의 힘
+description: 
 author: anesin
 date: 2025-06-19 07:00:00 +0900
 categories: [경제 / 경영, 경영]
