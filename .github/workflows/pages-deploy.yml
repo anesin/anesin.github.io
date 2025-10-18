@@ -72,48 +72,43 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
 
-      # 리포지토리 체크아웃 (변경 파일 목록 보려면 필요)
-      - name: Checkout (for diff)
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 2
-
-      # 변경된 포스트만 감지 → URL 리스트 생성
-      - name: Build changed post URL list
-        id: urls
+      # 배포본의 feed.xml(Atom)에서 <entry><link rel="alternate" ... href="..."> 만 추출
+      - name: Build URL list from deployed Atom feed
+        id: urls_from_feed
         shell: bash
         env:
-          BASE: "https://anesin.co.kr"              # ← 직접 입력
+          BASE: "https://anesin.co.kr"   # 사이트 루트 (직접 입력)
         run: |
-          # 1) 직전 커밋과 비교해 바뀐 포스트만 추출
-          git diff --name-only HEAD^ HEAD -- '_posts/*.md' > changed.txt || true
+          # 1) 배포본 feed.xml 가져오기
+          curl -sS "${BASE}/feed.xml" > feed.xml
 
-          # 2) 파일명 → 퍼마링크(가정: /posts/<slug>/)
-          > url_list.txt
-          while IFS= read -r f; do
-            [ -f "$f" ] || continue
-            base="$(basename "$f")"
-            slug="${base#????-??-??-}"     # YYYY-MM-DD- 제거
-            slug="${slug%.md}"
-            echo "${BASE}/posts/${slug}/" >> url_list.txt
-          done < changed.txt
+          # 2) Atom 포맷: <entry><link rel="alternate" type="text/html" href="..."/>
+          #    → entry 내부의 rel="alternate" href만 뽑기
+          grep -oP '(?i)(?<=<entry>).*?(?=</entry>)' feed.xml \
+            | grep -ioP '<link[^>]*rel="alternate"[^>]*href="https?://[^"]+"' \
+            | grep -ioP 'https?://[^"]+' \
+            > url_list.txt
 
-          # 변경이 없으면 홈/사이트맵만 제출
-          if [ ! -s url_list.txt ]; then
-            echo "${BASE}/" > url_list.txt
-            echo "${BASE}/sitemap.xml" >> url_list.txt
+          # (선택) posts 이하만 필터링
+          grep '/posts/' url_list.txt > url_list_posts.txt || true
+          if [ -s url_list_posts.txt ]; then
+            mv url_list_posts.txt url_list.txt
           fi
 
-          echo "Prepared URLs:" && cat url_list.txt
+          # (선택) 최근 N개만 전송하고 싶다면 head -n 5 등으로 제한
+          # head -n 5 url_list.txt > tmp && mv tmp url_list.txt
 
-      # 배포 반영 여유 (간단·안전)
+          echo "Prepared URLs from feed:" && cat url_list.txt
+
+      # 전파 대기 (간단·안전)
       - name: Wait for Pages propagation
-        run: sleep 30
+        run: sleep 3
 
-      # IndexNow 제출 (공식 포맷)
+      # IndexNow 전송 (공식 포맷)
       - name: Notify IndexNow
+        if: hashFiles('url_list.txt') != ''          # 목록이 있을 때만 전송
         env:
-          HOST: "anesin.co.kr"                        # ← 직접 입력 (host는 도메인만)
+          HOST: "anesin.co.kr"                       # host = 도메인만
           INDEXNOW_KEY: "848394252b544558bbaa73752b751847"
         run: |
           {
