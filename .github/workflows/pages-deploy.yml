@@ -72,57 +72,74 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
 
-      # 배포본 feed.xml(Atom)에서 실제 포스트 URL 뽑기 (견고 버전)
+      # ─────────────────────────────────────────────────────────────
+      # ① 배포본 feed.xml(Atom)에서 실제 포스트 URL 추출 → url_list.txt 생성
+      #    - 먼저 GitHub Pages가 반환하는 page_url 사용
+      #    - 실패 시 커스텀 도메인(anesin.co.kr)로 재시도
+      # ─────────────────────────────────────────────────────────────
       - name: Build URL list from deployed Atom feed
         id: urls_from_feed
         shell: bash
         env:
-          PRIMARY_BASE: "https://anesin.co.kr"                 # 커스텀 도메인
+          PRIMARY_BASE: "https://anesin.github.io"                 # 커스텀 도메인
           FALLBACK_BASE: ${{ steps.deployment.outputs.page_url }} # 배포 출력 URL
         run: |
           set -u
-          echo "FALLBACK_BASE=${FALLBACK_BASE}"
 
-          # 1) 배포 출력 URL → 2) 커스텀 도메인 순서로 feed.xml 시도
+          FEED_OK=0
           for BASE in "$FALLBACK_BASE" "$PRIMARY_BASE"; do
-            [ -z "$BASE" ] && continue
+            [ -z "${BASE:-}" ] && continue
             FEED_URL="${BASE%/}/feed.xml"
-            echo "Trying: ${FEED_URL}"
+            echo "Trying feed: $FEED_URL"
+
+            # 200 OK 될 때까지 여러 번 시도 (일시적 전파/SSL 지연 흡수)
             HTTP=$(curl -w "%{http_code}" -sS --retry 5 --retry-delay 3 -o feed.xml "$FEED_URL" || echo "000")
             echo "HTTP=$HTTP"
             if [ "$HTTP" = "200" ] && [ -s feed.xml ]; then
               echo "Feed downloaded from $FEED_URL"
+              FEED_OK=1
               break
             fi
             rm -f feed.xml || true
           done
 
-          # feed.xml 못 받았으면 전송 건너뜀
-          if [ ! -s feed.xml ]; then
+          # feed를 못 받으면 전송 생략(빈 파일 생성)
+          if [ "$FEED_OK" -ne 1 ]; then
             echo "No feed.xml available yet; skipping IndexNow."
-            > url_list.txt
+            : > url_list.txt
             exit 0
           fi
 
-          # Atom: <entry> 내부의 rel="alternate" href= 링크만 추출
-          grep -oP '(?i)(?<=<entry>).*?(?=</entry>)' feed.xml \
-            | grep -ioP '<link[^>]*rel="alternate"[^>]*href="https?://[^"]+"' \
-            | grep -ioP 'https?://[^"]+' \
-            | grep '/posts/' \
-            | head -n 10 > url_list.txt
+          # Atom: <entry> … </entry> 내부에서 rel="alternate" href만 추출
+          # (매치 0건이어도 실패하지 않도록 || true 사용)
+          : > url_list_raw.txt
+          grep -oP '(?is)(?<=<entry>).*?(?=</entry>)' feed.xml                || true \
+            | grep -ioP '<link[^>]*rel="alternate"[^>]*href="https?://[^"]+"' || true \
+            | grep -ioP 'https?://[^"]+'                                      || true \
+            > url_list_raw.txt
+
+          # /posts/ 경로만 남기고 필요시 상위 N개로 제한 (head -n 값 조절)
+          : > url_list.txt
+          grep '/posts/' url_list_raw.txt | head -n 10 > url_list.txt || true
 
           echo "Prepared URLs from feed:"
-          cat url_list.txt
+          cat url_list.txt || true
 
-      # 전파 대기 (간단·안전)
+      # ─────────────────────────────────────────────────────────────
+      # ② (선택) 전파 대기: GitHub Pages가 전 세계 PoP에 반영될 시간 확보
+      # ─────────────────────────────────────────────────────────────
       - name: Wait for Pages propagation
-        run: sleep 10
+        if: hashFiles('url_list.txt') != ''
+        run: sleep 20
 
-      # IndexNow 전송 (공식 포맷)
+      # ─────────────────────────────────────────────────────────────
+      # ③ IndexNow 요청 (공식 포맷) — 실제 공개 URL만 전송
+      #    host: 도메인만, key: 루트에 동일한 키 파일(<KEY>.txt)도 존재해야 안정
+      # ─────────────────────────────────────────────────────────────
       - name: Notify IndexNow
-        if: hashFiles('url_list.txt') != ''          # 목록이 있을 때만 전송
+        if: hashFiles('url_list.txt') != ''
         env:
-          HOST: "anesin.co.kr"                       # host = 도메인만
+          HOST: "anesin.co.kr"
           INDEXNOW_KEY: "848394252b544558bbaa73752b751847"
         run: |
           {
