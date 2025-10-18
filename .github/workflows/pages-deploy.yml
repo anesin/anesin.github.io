@@ -71,3 +71,73 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      # _config.yml에서 url/baseurl/host 추출
+      - name: Read site URL from _config.yml
+        id: readcfg
+        shell: bash
+        run: |
+          URL=$(grep '^url:' _config.yml | awk '{print $2}' | tr -d '"')
+          BASEURL=$(grep '^baseurl:' _config.yml | awk '{print $2}' | tr -d '"')
+          HOST=$(echo "$URL" | sed 's#https\?://##; s#/$##')
+          [ -z "$BASEURL" ] && BASEURL=""
+          echo "url=$URL" >> $GITHUB_OUTPUT
+          echo "baseurl=$BASEURL" >> $GITHUB_OUTPUT
+          echo "host=$HOST" >> $GITHUB_OUTPUT
+
+      # 변경된 포스트 감지 → URL 목록 생성
+      - name: Checkout (for diff)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Build changed post URL list
+        id: urls
+        shell: bash
+        env:
+          URL: ${{ steps.readcfg.outputs.url }}
+          BASEURL: ${{ steps.readcfg.outputs.baseurl }}
+        run: |
+          git diff --name-only HEAD^ HEAD -- '_posts/*.md' > changed.txt || true
+          BASE="${URL%/}${BASEURL}"
+          > url_list.txt
+          while IFS= read -r f; do
+            [ -f "$f" ] || continue
+            base="$(basename "$f")"
+            slug="${base#????-??-??-}"
+            slug="${slug%.md}"
+            echo "${BASE}/posts/${slug}/" >> url_list.txt
+          done < changed.txt
+
+          if [ ! -s url_list.txt ]; then
+            echo "${BASE}/" > url_list.txt
+            echo "${BASE}/sitemap.xml" >> url_list.txt
+          fi
+
+          echo "Prepared URLs:" && cat url_list.txt
+
+      # 배포 후 전파 대기
+      - name: Wait for Pages propagation
+        run: sleep 60
+
+      # ✅ IndexNow 요청 (공식 포맷, keyLocation 생략)
+      - name: Notify IndexNow
+        env:
+          HOST: ${{ steps.readcfg.outputs.host }}
+        run: |
+          {
+            printf '{\n'
+            printf '  "host": "%s",\n' "$HOST"
+            printf '  "key": "848394252b544558bbaa73752b751847",\n'
+            printf '  "urlList": [\n'
+            awk 'BEGIN{first=1} { if(!first) printf(",\n"); printf("    \"%s\"", $0); first=0 } END{printf("\n")} ' url_list.txt
+            printf '  ]\n'
+            printf '}\n'
+          } > payload.json
+
+          echo "Submitting IndexNow payload:"
+          cat payload.json
+
+          curl -sS -X POST "https://api.indexnow.org/indexnow" \
+            -H 'Content-Type: application/json; charset=utf-8' \
+            --data-binary @payload.json
