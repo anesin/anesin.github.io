@@ -72,37 +72,51 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
 
-      # 배포본의 feed.xml(Atom)에서 <entry><link rel="alternate" ... href="..."> 만 추출
+      # 배포본 feed.xml(Atom)에서 실제 포스트 URL 뽑기 (견고 버전)
       - name: Build URL list from deployed Atom feed
         id: urls_from_feed
         shell: bash
         env:
-          BASE: "https://anesin.co.kr"   # 사이트 루트 (직접 입력)
+          PRIMARY_BASE: "https://anesin.co.kr"                 # 커스텀 도메인
+          FALLBACK_BASE: ${{ steps.deployment.outputs.page_url }} # 배포 출력 URL
         run: |
-          # 1) 배포본 feed.xml 가져오기
-          curl -sS "${BASE}/feed.xml" > feed.xml
+          set -u
+          echo "FALLBACK_BASE=${FALLBACK_BASE}"
 
-          # 2) Atom 포맷: <entry><link rel="alternate" type="text/html" href="..."/>
-          #    → entry 내부의 rel="alternate" href만 뽑기
+          # 1) 배포 출력 URL → 2) 커스텀 도메인 순서로 feed.xml 시도
+          for BASE in "$FALLBACK_BASE" "$PRIMARY_BASE"; do
+            [ -z "$BASE" ] && continue
+            FEED_URL="${BASE%/}/feed.xml"
+            echo "Trying: ${FEED_URL}"
+            HTTP=$(curl -w "%{http_code}" -sS --retry 5 --retry-delay 3 -o feed.xml "$FEED_URL" || echo "000")
+            echo "HTTP=$HTTP"
+            if [ "$HTTP" = "200" ] && [ -s feed.xml ]; then
+              echo "Feed downloaded from $FEED_URL"
+              break
+            fi
+            rm -f feed.xml || true
+          done
+
+          # feed.xml 못 받았으면 전송 건너뜀
+          if [ ! -s feed.xml ]; then
+            echo "No feed.xml available yet; skipping IndexNow."
+            > url_list.txt
+            exit 0
+          fi
+
+          # Atom: <entry> 내부의 rel="alternate" href= 링크만 추출
           grep -oP '(?i)(?<=<entry>).*?(?=</entry>)' feed.xml \
             | grep -ioP '<link[^>]*rel="alternate"[^>]*href="https?://[^"]+"' \
             | grep -ioP 'https?://[^"]+' \
-            > url_list.txt
+            | grep '/posts/' \
+            | head -n 10 > url_list.txt
 
-          # (선택) posts 이하만 필터링
-          grep '/posts/' url_list.txt > url_list_posts.txt || true
-          if [ -s url_list_posts.txt ]; then
-            mv url_list_posts.txt url_list.txt
-          fi
-
-          # (선택) 최근 N개만 전송하고 싶다면 head -n 5 등으로 제한
-          # head -n 5 url_list.txt > tmp && mv tmp url_list.txt
-
-          echo "Prepared URLs from feed:" && cat url_list.txt
+          echo "Prepared URLs from feed:"
+          cat url_list.txt
 
       # 전파 대기 (간단·안전)
       - name: Wait for Pages propagation
-        run: sleep 3
+        run: sleep 10
 
       # IndexNow 전송 (공식 포맷)
       - name: Notify IndexNow
