@@ -72,56 +72,47 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
 
-      # ─────────────────────────────────────────────────────────────
-      # ① 배포본 feed.xml에서 포스트 URL 추출(간결 버전) → url_list.txt 생성
-      #    - 기본 도구만 사용: curl + grep + sed
-      #    - 필요 시 중복 제거/상위 N개 제한 가능
-      # ─────────────────────────────────────────────────────────────
-      - name: Build URL list from feed (simple)
+      - name: Notify IndexNow (no temp file)
         shell: bash
-        run: |
-          # feed.xml → href만 추출 → /posts/만 필터 → (중복 제거/상위 N개 제한) → 저장
-          curl -s https://anesin.co.kr/feed.xml \
-          | grep -Eo 'href="https?://[^"]+"' \
-          | sed -E 's/^href="//; s/"$//' \
-          | grep '/posts/'
-          > url_list.txt
-
-          echo "Prepared URLs from feed:"
-          cat url_list.txt || true
-
-      # ─────────────────────────────────────────────────────────────
-      # ② (선택) 전파 대기 — 배포 직후 CDN 반영 시간 확보
-      # ─────────────────────────────────────────────────────────────
-      - name: Wait for Pages propagation
-        if: hashFiles('url_list.txt') != ''
-        run: sleep 20
-
-      # ─────────────────────────────────────────────────────────────
-      # ③ IndexNow 전송 (공식 포맷)
-      #    - host: 도메인만 기입
-      #    - key : 루트에 동일 키 파일(<KEY>.txt)도 존재하면 검증이 더 안정적
-      # ─────────────────────────────────────────────────────────────
-      - name: Notify IndexNow
-        if: hashFiles('url_list.txt') != ''
         env:
           HOST: "anesin.co.kr"
           INDEXNOW_KEY: "848394252b544558bbaa73752b751847"
-        shell: bash
         run: |
-          {
-            printf '{\n'
-            printf '  "host": "%s",\n' "$HOST"
-            printf '  "key": "%s",\n' "$INDEXNOW_KEY"
-            printf '  "urlList": [\n'
-            awk 'BEGIN{first=1} { if(!first) printf(",\n"); printf("    \"%s\"", $0); first=0 } END{printf("\n")} ' url_list.txt
-            printf '  ]\n'
-            printf '}\n'
-          } > payload.json
+          # ① feed.xml 가져오기
+          FEED_URL="https://anesin.co.kr/feed.xml"
+          echo "Fetching feed: $FEED_URL"
+          FEED=$(curl -fsSL "$FEED_URL" || true)
+
+          if [ -z "$FEED" ]; then
+            echo "⚠️  feed.xml not available — skipping IndexNow."
+            exit 0
+          fi
+
+          # ② href 속성에서 /posts/ 포함된 링크만 추출
+          URLS=$(printf "%s" "$FEED" \
+            | grep -Eo 'href="https?://[^"]+"' \
+            | sed -E 's/^href="//; s/"$//' \
+            | grep '/posts/')
+
+          if [ -z "$URLS" ]; then
+            echo "⚠️  No post URLs found — skipping IndexNow."
+            exit 0
+          fi
+
+          echo "Prepared URLs:"
+          echo "$URLS"
+
+          # ③ JSON 생성 (메모리 상에서 바로 payload 구성)
+          PAYLOAD=$(jq -n \
+            --arg host "$HOST" \
+            --arg key "$INDEXNOW_KEY" \
+            --argjson urls "$(printf '%s\n' "$URLS" | jq -R . | jq -s .)" \
+            '{host: $host, key: $key, urlList: $urls}')
 
           echo "Submitting IndexNow payload:"
-          cat payload.json
+          echo "$PAYLOAD"
 
+          # ④ IndexNow API 호출
           curl -sS -X POST "https://api.indexnow.org/indexnow" \
             -H 'Content-Type: application/json; charset=utf-8' \
-            --data-binary @payload.json
+            -d "$PAYLOAD"
