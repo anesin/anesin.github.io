@@ -77,6 +77,7 @@ jobs:
         id: readcfg
         shell: bash
         run: |
+          cd $GITHUB_WORKSPACE   # ✅ 항상 리포지토리 루트로 이동
           URL=$(grep '^url:' _config.yml | awk '{print $2}' | tr -d '"')
           BASEURL=$(grep '^baseurl:' _config.yml | awk '{print $2}' | tr -d '"')
           HOST=$(echo "$URL" | sed 's#https\?://##; s#/$##')
