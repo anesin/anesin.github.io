@@ -31,14 +31,15 @@ copyright:
   # Shown at the bottom of the post
   license:
     template: هذا المنشور تحت ترخيص :LICENSE_NAME بواسطة المؤلف.
-    name: CC BY 4.0
-    link: https://creativecommons.org/licenses/by/4.0/
+    name: CC BY-NC-ND 4.0
+    link: https://creativecommons.org/licenses/by-nc-nd/4.0/
 
   # Displayed in the footer
   brief: بعض الحقوق محفوظة.
   verbose: >-
-    ما لم يذكر خلاف ذلك ، يتم ترخيص منشورات المدونة على هذا الموقع
-    بموجب ترخيص Creative Commons Attribution 4.0 International (CC BY 4.0) من قبل المؤلف.
+    ما لم يُذكر خلاف ذلك، يتم ترخيص منشورات المدونة على هذا الموقع
+    بموجب ترخيص المشاع الإبداعي نَسب-غير تجاري-بدون مشتقات 4.0 الدولي (CC BY-NC-ND 4.0) من قبل المؤلف.
+    يُسمح فقط بمشاركة العمل الأصلي لأغراض غير تجارية، بينما يُحظر التعديل أو الاقتباس أو إنشاء أعمال مشتقة أو الاستخدام التجاري.
 
 meta: باستخدام :PLATFORM السمة :THEME
 

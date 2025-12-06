@@ -31,14 +31,16 @@ copyright:
   # Shown at the bottom of the post
   license:
     template: Cet article est sous licence :LICENSE_NAME par l'auteur.
-    name: CC BY 4.0
-    link: https://creativecommons.org/licenses/by/4.0/deed.fr
+    name: CC BY-NC-ND 4.0
+    link: https://creativecommons.org/licenses/by-nc-nd/4.0/deed.fr
 
   # Displayed in the footer
   brief: Certains droits réservés.
   verbose: >-
-    Sauf mention contraire, les articles de ce site sont publiés
-    sous la licence Creative Commons Attribution 4.0 International (CC BY 4.0) par l'auteur.
+    Sauf indication contraire, les articles de ce site sont publiés
+    sous la licence Creative Commons Attribution–Pas d’Utilisation Commerciale–Pas de Modification 4.0 International (CC BY-NC-ND 4.0) par l’auteur.
+    Seul le partage non commercial de l’œuvre originale est autorisé ; la modification,
+    l’adaptation, la création d’œuvres dérivées et l’utilisation commerciale sont interdites.
 
 meta: Propulsé par :PLATFORM avec le thème :THEME
 

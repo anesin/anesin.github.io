@@ -31,14 +31,16 @@ copyright:
   # Shown at the bottom of the post
   license:
     template: Questo post è sotto licenza :LICENSE_NAME a nome dell'autore.
-    name: CC BY 4.0
-    link: https://creativecommons.org/licenses/by/4.0/
+    name: CC BY-NC-ND 4.0
+    link: https://creativecommons.org/licenses/by-nc-nd/4.0/
 
   # Displayed in the footer
   brief: Alcuni diritti riservati.
   verbose: >-
-    Eccetto quando esplicitamente menzionato, i post di questo blog sono da ritenersi sotto
-    i termini di licenza Creative Commons Attribution 4.0 International (CC BY 4.0).
+    Eccetto quando espressamente indicato, i post di questo blog sono concessi 
+    sotto la licenza Creative Commons Attribuzione-NonCommerciale-NonOpereDerivate 4.0 Internazionale (CC BY-NC-ND 4.0) dall’autore. 
+    È consentita solo la condivisione dell'opera originale per scopi non commerciali; 
+    la modifica, l'adattamento, le opere derivate e l'uso commerciale sono vietati.
 
 meta: Servizio offerto da :PLATFORM con tema :THEME
 not_found:

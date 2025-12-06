@@ -31,14 +31,16 @@ copyright:
   # Shown at the bottom of the post
   license:
     template: Тази публикация е лицензирана под :LICENSE_NAME от автора.
-    name: CC BY 4.0
-    link: https://creativecommons.org/licenses/by/4.0/
+    name: CC BY-NC-ND 4.0
+    link: https://creativecommons.org/licenses/by-nc-nd/4.0/
 
   # Displayed in the footer
   brief: Някои права запазени.
   verbose: >-
     Освен ако не е посочено друго, публикациите в блога на този сайт са лицензирани
-    под лиценза Creative Commons Attribution 4.0 (CC BY 4.0) от автора.
+    от автора под лиценза Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0).
+    Разрешено е единствено споделяне на оригиналното съдържание за нетърговски цели.
+    Промените, адаптациите, производните произведения и търговската употреба са забранени.
 
 meta: Създадено чрез :PLATFORM и :THEME тема
 

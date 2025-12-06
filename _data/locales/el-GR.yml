@@ -31,14 +31,15 @@ copyright:
   # Shown at the bottom of the post
   license:
     template: Η δημοσίευση αυτή βρίσκεται υπο την άδεια :LICENSE_NAME Greekforce1821.
-    name: CC BY 4.0
-    link: https://creativecommons.org/licenses/by/4.0/
+    name: CC BY-NC-ND 4.0
+    link: https://creativecommons.org/licenses/by-nc-nd/4.0/
 
   # Displayed in the footer
   brief: Ορισμένα δικαιώματα reserved.
   verbose: >-
-    Εκτός αλλού ή οπουδήποτε αλλού, τα blog posts σε αυτήν την σελίδα βρίσκονται υπο την άδεια
-    Creative Commons Attribution 4.0 International (CC BY 4.0) του δημιουργού.
+    Εκτός αν αναφέρεται διαφορετικά, οι δημοσιεύσεις του blog σε αυτήν τη σελίδα
+    καλύπτονται από την άδεια Creative Commons Αναφορά–Μη Εμπορική Χωρίς Παράγωγα 4.0 International (CC BY-NC-ND 4.0) του δημιουργού.
+    Επιτρέπεται μόνο η μη εμπορική κοινοποίηση του αρχικού έργου, ενώ η τροποποίηση, η προσαρμογή, η δημιουργία παραγώγων και η εμπορική χρήση απαγορεύονται.
 
 meta: Αξιοποιώντας την :PLATFORM theme :THEME
 

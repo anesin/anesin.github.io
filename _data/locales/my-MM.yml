@@ -31,14 +31,17 @@ copyright:
   # Shown at the bottom of the post
   license:
     template: ဤပို့စ်သည်စာရေးသူ၏ :LICENSE_NAME လိုင်စင်ရထားသည်။
-    name: CC BY 4.0
-    link: https://creativecommons.org/licenses/by/4.0/
+    name: CC BY-NC-ND 4.0
+    link: https://creativecommons.org/licenses/by-nc-nd/4.0/
 
   # Displayed in the footer
   brief: မူပိုင်ခွင့်အချို့ကို လက်ဝယ်ထားသည်။
   verbose: >-
-    အခြားမှတ်သားထားချက်များမှလွဲ၍ ဤဆိုက်ရှိ ဘလော့ဂ်ပို့စ်များသည် စာရေးသူ၏
-    Creative Commons Attribution 4.0 International (CC BY 4.0) အောက်တွင် လိုင်စင်ရထားပါသည်။
+    အခြားသတ်မှတ်ချက်များမရှိပါက ဤဆိုက်ရှိ ဘလော့ဂ်ပို့စ်များကို
+    စာရေးသူ၏ Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International 
+    (CC BY-NC-ND 4.0) လိုင်စင်အောက်တွင် နိုင်ငံပေါင်းမဟုတ်သော ရည်ရွယ်ချက်များအတွက် 
+    မူရင်းအတိုင်းမျှဝေရန်သာ ခွင့်ပြုထားပြီး ပြင်ဆင်ခြင်း၊ ပြောင်းလဲခြင်း၊ အစားထိုးရေးဆွဲခြင်း 
+    သို့မဟုတ် ကုန်သုံးလုပ်ငန်းများတွင် အသုံးပြုခြင်းတို့ကို တားမြစ်ထားပါသည်။
 
 meta: Powered by :PLATFORM with :THEME theme
 

@@ -31,14 +31,15 @@ copyright:
   # Shown at the bottom of the post
   license:
     template: این پست تحت مجوز :LICENSE_NAME توسط نویسنده منتشر شده است.
-    name: CC BY 4.0
-    link: https://creativecommons.org/licenses/by/4.0/
+    name: CC BY-NC-ND 4.0
+    link: https://creativecommons.org/licenses/by-nc-nd/4.0/
 
   # Displayed in the footer
   brief: برخی حقوق محفوظ است.
   verbose: >-
     مگر اینکه خلاف آن ذکر شده باشد، پست‌های وبلاگ در این سایت
-    تحت مجوز Creative Commons Attribution 4.0 International (CC BY 4.0) توسط نویسنده منتشر شده‌اند.
+    تحت مجوز کریتیو کامنز انتساب-غیرتجاری-بدون‌مشتق 4.0 بین‌المللی (CC BY-NC-ND 4.0) توسط نویسنده منتشر شده‌اند.
+    تنها اشتراک‌گذاری نسخه اصلی برای مقاصد غیرتجاری مجاز است و هرگونه ویرایش، اقتباس، ایجاد آثار مشتق و استفاده تجاری ممنوع می‌باشد.
 
 meta: با استفاده از :PLATFORM قالب :THEME
 

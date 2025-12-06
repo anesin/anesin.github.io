@@ -31,14 +31,16 @@ copyright:
   # Shown at the bottom of the post
   license:
     template: Публікація захищена ліцензією :LICENSE_NAME.
-    name: CC BY 4.0
-    link: https://creativecommons.org/licenses/by/4.0/
+    name: CC BY-NC-ND 4.0
+    link: https://creativecommons.org/licenses/by-nc-nd/4.0/
 
   # Displayed in the footer
   brief: Деякі права захищено.
   verbose: >-
-    Публікації на сайті захищено ліцензією Creative Commons Attribution 4.0 International (CC BY 4.0),
-    якщо інше не вказано в тексті.
+    Публікації на цьому сайті, якщо не зазначено інше, ліцензуються 
+    за ліцензією Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0) автором. 
+    Дозволяється лише некомерційне поширення оригінального матеріалу. 
+    Модифікація, адаптація, створення похідних творів та комерційне використання заборонені.
 
 meta: Powered by :PLATFORM with :THEME theme
 

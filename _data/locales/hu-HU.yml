@@ -31,15 +31,15 @@ copyright:
   # Shown at the bottom of the post
   license:
     template: A bejegyzést a szerző :LICENSE_NAME licenc alatt engedélyezte.
-    name: CC BY 4.0
-    link: https://creativecommons.org/licenses/by/4.0/
+    name: CC BY-NC-ND 4.0
+    link: https://creativecommons.org/licenses/by-nc-nd/4.0/
 
   # Displayed in the footer
   brief: Néhány jog fenntartva.
   verbose: >-
-    Az oldalon található tartalmak
-    Creative Commons Attribution 4.0 International (CC BY 4.0) licenccel rendelkeznek,
-    hacsak másképp nincs jelezve.
+    Hacsak másként nincs jelezve, az oldalon található bejegyzések 
+    a szerző Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0) licence alatt érhetők el.
+    Csak az eredeti mű nem kereskedelmi célú megosztása engedélyezett; a módosítás, az átdolgozás, a származékos művek készítése és a kereskedelmi felhasználás tilos.
 
 meta: Készítve :THEME témával a :PLATFORM platformra.
 
