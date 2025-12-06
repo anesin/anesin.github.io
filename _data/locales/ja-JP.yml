@@ -1,0 +1,88 @@
+# The layout text of site
+
+# ----- Commons label -----
+
+layout:
+  post: ポスト
+  category: カテゴリー
+  tag: タグ
+
+# The tabs of sidebar
+tabs:
+  home: ホーム
+  categories: カテゴリー
+  tags: タグ
+  archives: アーカイブ
+  about: 紹介
+
+# the text displayed in the search bar & search results
+search:
+  hint: 検索
+  cancel: キャンセル
+  no_results: 検索結果がありません。
+
+panel:
+  lastmod: 最終更新
+  trending_tags: 人気タグ
+  toc: 目次
+
+copyright:
+  # Shown at the bottom of the post
+  license:
+    template: 本記事は著作権者の :LICENSE_NAME ライセンスに従います。
+    name: CC BY-NC-ND 4.0
+    link: https://creativecommons.org/licenses/by-nc-nd/4.0/
+
+  # Displayed in the footer
+  brief: 一部の権利を保有
+  verbose: >-
+    特に明記されていない限り、本サイトのすべてのブログ記事は
+    著者による Creative Commons Attribution-NonCommercial-NoDerivatives
+    4.0 International (CC BY-NC-ND 4.0) ライセンスの下で提供されています。
+    非営利目的における原文そのままの共有のみが許可されます。
+    改変、編集、二次的著作物の作成、および商用利用は禁止されています。
+
+meta: :PLATFORM を :THEME テーマで運用
+
+not_found:
+  statement: 該当するURLは存在しません。
+
+notification:
+  update_found: 新しいバージョンのコンテンツが利用できます。
+  update: 更新
+
+# ----- Posts related labels -----
+
+post:
+  written_by: By
+  posted: 投稿
+  updated: 更新
+  words: 単語
+  pageview_measure: 閲覧数
+  read_time:
+    unit: 分
+    prompt: 読む時間
+  relate_posts: 関連記事
+  share: シェア
+  button:
+    next: 次の記事
+    previous: 前の記事
+    copy_code:
+      succeed: コピーしました！
+    share_link:
+      title: リンクをコピー
+      succeed: リンクがコピーされました！
+
+# Date time format.
+df:
+  post:
+    strftime: "%Y/%m/%d"
+    dayjs: "YYYY/MM/DD"
+  archives:
+    strftime: "%b"
+    dayjs: "MMM"
+
+# categories page
+categories:
+  category_measure: カテゴリー
+  post_measure: ポスト
