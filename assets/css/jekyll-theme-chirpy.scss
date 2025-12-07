@@ -58,3 +58,11 @@ blockquote {
   font-style: italic;
   line-height: 1.5;
 }
+
+/* 전체 페이지 텍스트 선택 금지 */
+body {
+  -webkit-user-select: none;  /* Safari / Chrome */
+  -moz-user-select: none;     /* Firefox */
+  -ms-user-select: none;      /* IE/Edge(구형) */
+  user-select: none;
+}
