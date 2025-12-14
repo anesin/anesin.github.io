@@ -13,10 +13,12 @@ layout: page
 
   {% for t in sorted_tags %}
     <div>
-      <a class="tag" href="{{ t | slugify | url_encode | prepend: '/tags/' | append: '/' | relative_url }}">
+      <!-- <a class="tag" href="{{ t | slugify | url_encode | prepend: '/tags/' | append: '/' | relative_url }}"> -->
+      <span class="tag">
         {{ t -}}
         <span class="text-muted">{{ site.tags[t].size }}</span>
-      </a>
+      </span>
+      <!-- </a> -->
     </div>
   {% endfor %}
 </div>
